@@ -10,10 +10,14 @@ var config = {
   appRoot: __dirname // required config
 };
 
+require('dotenv').config();
+
+
 SwaggerRestify.create(config, function(err, swaggerRestify) {
   if (err) { throw err; }
 
   swaggerRestify.register(app);
+
 
   var port = process.env.PORT || 10010;
   app.listen(port);

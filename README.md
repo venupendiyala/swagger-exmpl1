@@ -31,5 +31,5 @@ ____
 
 #### Editor
 
-- VSCode editor is one of the option, Please feel free to use editor of your choice : [here](https://code.visualstudio.com/) 
+- VSCode editor is one of the option, Please feel free to use editor of your choice : Install VSCode [here](https://code.visualstudio.com/) 
 
