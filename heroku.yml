@@ -1,0 +1,15 @@
+setup:
+  addons:
+    - plan: 'papertrail:choklad'
+      as: PAPERTRAIL
+    - plan: 'heroku-postgresql:hobby-dev'
+      as: DATABASE
+    - plan: 'heroku-redis:hobby-dev'
+      as: REDIS
+  config: {}
+build:
+  languages:
+    - nodejs
+run:
+  web: npm start
+  worker: node verify.js
