@@ -1,4 +1,3 @@
-console.log('running the worker console');
 
 const kue = require('kue');
 
@@ -7,6 +6,8 @@ try {
     redis: process.env.REDIS_URL,
 });
 queue.process('first', (job, done) => {
+    console.log('running the worker console');
+
 switch (job.data.letter) {
 case 'a':
 console.log(job.data.letter);
