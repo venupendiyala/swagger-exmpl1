@@ -46,21 +46,46 @@ paths:
     # binds a127 app logic to a route
     x-swagger-router-controller: pg_operations
     get:
-      description: Returns 'Hello' to the caller
+      description: Returns response based on the table creation to the caller
       # used as the method name of the controller
       operationId: createTable
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
-          type: string
       responses:
         "200":
           description: Success
           schema:
             # a pointer to a definition
             $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /registerCar:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: car_operations
+    post:
+      description: Returns response based on the table creation to the caller
+      # used as the method name of the controller
+      operationId: registerCar
+      parameters:
+        - name: name
+          in: body
+          description: The name of the person to whom to say hello
+          required: true
+          schema:
+            $ref: "#/definitions/Car"  
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Car"  
+        400:
+            $ref: '#/responses/400BadRequest'
+        401:
+            $ref: '#/responses/401Unauthorized'
+        403:
+          $ref: '#/responses/403Forbidden'
         # responses may fall through to errors
         default:
           description: Error
@@ -82,3 +107,61 @@ definitions:
     properties:
       message:
         type: string
+  ValidationError:
+    type: object
+    properties:
+      message:
+        type: string
+      errors:
+        $ref: '#/definitions/Errors'
+  Message:
+    type: object
+    properties:
+      message:
+        type: string
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      field:
+        type: string
+  Errors:
+    type: array
+    items:
+      $ref: '#/definitions/Error'
+  Car:
+  #Property validation example
+    properties:
+      name:
+        type: string
+        description: What is the Name of the car
+        minLength: 3
+        maxLength: 10
+      make:
+        type: string
+        pattern: '(^[a-zA-Z,-]+$){1}(\,^[a-zA-Z,-]+$){0,5}'
+        description: Which Company Built It
+        minLength: 3
+        maxLength: 15  
+    required:
+      - name
+    example:
+      name: C-Class
+      make: Mercedes Benz
+responses:
+  400BadRequest:
+    description: The request was invalid or cannot be otherwise served.
+    schema:
+      $ref: '#/definitions/ValidationError'
+  401Unauthorized:
+    description: Authentication credentials were missing or incorrect.
+    schema:
+      $ref: '#/definitions/Message'
+  403Forbidden:
+    description: The request is understood, but it has been refused or access is not allowed.
+    schema:
+      $ref: '#/definitions/Message'

@@ -1,6 +1,6 @@
 {
-  "name": "hello-world",
-  "version": "0.0.1",
+  "name": "heroku-cop-demo",
+  "version": "1.0.0",
   "private": true,
   "description": "New Swagger API Project",
   "keywords": [],
@@ -9,6 +9,7 @@
   "main": "app.js",
   "dependencies": {
     "dotenv": "^6.1.0",
+    "kue": "^0.11.6",
     "pg": "^7.7.1",
     "restify": "^4.0.2",
     "swagger-restify-mw": "^0.1.0"
