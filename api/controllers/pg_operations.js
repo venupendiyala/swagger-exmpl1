@@ -1,5 +1,4 @@
 const { Client } = require('pg');
-const queHelper = require('../helpers/publishJob');
 
 const client = new Client({ connectionString: process.env.DATABASE_URL,ssl: 'require' });
 
@@ -42,7 +41,6 @@ const createTable = (req,res) => {
     try {
         await client.query(`CREATE TABLE IF NOT EXISTS cars (id SERIAL PRIMARY KEY, name varchar(30),make varchar(30));`);
           console.log('Successfully created table.');
-          await queHelper.createJob('first');
           res.json({
             data:{
                 status:'success',
