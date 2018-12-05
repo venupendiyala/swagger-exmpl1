@@ -22,11 +22,13 @@ Adding the new car to the Database
 const registerCar = (req, res) => {
 var name = req.body.name;
 var make = req.body.make;
-let values = [name,make];
+var owner = req.body.owner;
+
+let values = [name,make,owner];
 checkConnection().then(async() => {
-   const vv = await client.query('INSERT INTO cars (name,make) VALUES ($1,$2) returning * ',values);
+   const vv = await client.query('INSERT INTO cars (name,make,owner) VALUES ($1,$2,$3) returning * ',values);
    console.log(vv.rows[0])
-   await queHelper.createJob(name,make);
+   await queHelper.createJob(name,make,owner);
         res.json({
             data:{
                 status:'success',

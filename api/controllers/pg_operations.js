@@ -21,27 +21,10 @@ const checkConnection = async() =>{
 }
 };
 
-const checkTable = async (key) => {
-  await checkConnection();
-
-  try {
-  
-    const resp = await client.query(`SELECT id FROM ${key} limit 1;`);
-    if (resp) {
-      console.log(`Successfully found ${key}.`);
-      return true;
-    }
-  } catch (err) {
-    console.log(`Failed to find ${key}.`);
-    return false;
-  }
-  return true;
-};
-
 const createTable = (req,res) => {
   checkConnection().then(async() => {
     try {
-        await client.query(`CREATE TABLE IF NOT EXISTS cars (id SERIAL PRIMARY KEY, name varchar(30),make varchar(30));`);
+        await client.query(`CREATE TABLE IF NOT EXISTS cars (id SERIAL PRIMARY KEY, name varchar(30),make varchar(30),owner varchar(40));`);
           console.log('Successfully created table.');
           res.json({
             data:{

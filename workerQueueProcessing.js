@@ -8,7 +8,7 @@ try {
         console.log('running the worker console');
         console.log(job.data.carName);
         //Logic to send Email to the user using SendGrid
-        done(null, job.data.carName);
+        done(null, job.data.carOwner);
     });
 } catch (error) {
     console.log(error);
