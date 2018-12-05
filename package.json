@@ -1,0 +1,27 @@
+{
+  "name": "heroku-cop-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "New Swagger API Project",
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "main": "app.js",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "eslint": "^5.9.0",
+    "kue": "^0.11.6",
+    "pg": "^7.7.1",
+    "restify": "^4.0.2",
+    "sendgrid": "^5.2.3",
+    "swagger-restify-mw": "^0.1.0"
+  },
+  "devDependencies": {
+    "should": "^7.1.0",
+    "supertest": "^1.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "swagger project test"
+  }
+}

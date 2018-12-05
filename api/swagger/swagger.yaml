@@ -1,0 +1,165 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Car Registration App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+securityDefinitions:
+  APIKey:
+    description: "Access Token (JWT) from Ping"
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    x-audience: "48ugep2agrcnpfp0"
+paths:
+  /getAllCars:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: car_operations
+    get:
+      security:
+          - APIKey: []
+      description: Returns all cars to the caller
+      # used as the method name of the controller
+      operationId: fetchAllCars
+      responses:
+        "200":
+          description: Success
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /create_table:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: pg_operations
+    get:
+      description: Returns response based on the table creation to the caller
+      # used as the method name of the controller
+      operationId: createTable
+      responses:
+        "200":
+          description: Success
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /registerCar:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: car_operations
+    post:
+      description: Returns car registration Id
+      # used as the method name of the controller
+      operationId: registerCar
+      parameters:
+        - name: name
+          in: body
+          description: The name of the person to whom to say hello
+          required: true
+          schema:
+            $ref: "#/definitions/Car"  
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Car"  
+        400:
+            $ref: '#/responses/400BadRequest'
+        401:
+            $ref: '#/responses/401Unauthorized'
+        403:
+          $ref: '#/responses/403Forbidden'
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ValidationError:
+    type: object
+    properties:
+      message:
+        type: string
+      errors:
+        $ref: '#/definitions/Errors'
+  Message:
+    type: object
+    properties:
+      message:
+        type: string
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      field:
+        type: string
+  Errors:
+    type: array
+    items:
+      $ref: '#/definitions/Error'
+  Car:
+  #Property validation example
+    properties:
+      name:
+        type: string
+        description: What is the Name or model of the car
+        minLength: 3
+        maxLength: 15
+      make:
+        type: string
+        pattern: '(^[a-zA-Z,-]+$){1}(\,^[a-zA-Z,-]+$){0,5}'
+        description: Which Company Built It
+        minLength: 2
+        maxLength:  30
+      owner:
+        type: string
+        description: Name of the owner for the car
+        minLength: 4
+        maxLength: 25   
+    required:
+      - name
+      - owner
+    example:
+      name: C-Class
+      make: Mercedes Benz
+      owner: John
+responses:
+  400BadRequest:
+    description: The request was invalid or cannot be otherwise served.
+    schema:
+      $ref: '#/definitions/ValidationError'
+  401Unauthorized:
+    description: Authentication credentials were missing or incorrect.
+    schema:
+      $ref: '#/definitions/Message'
+  403Forbidden:
+    description: The request is understood, but it has been refused or access is not allowed.
+    schema:
+      $ref: '#/definitions/Message'
