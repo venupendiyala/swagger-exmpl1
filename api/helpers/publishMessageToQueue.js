@@ -4,17 +4,17 @@ const queue = Queue.createQueue({
     redis: process.env.REDIS_URL,
 });
 
-const createJob = async (jobType) => {
-    const job = queue.create(jobType, {
-        letter: 'a',
-        title: 'mytitle',
+const createJob = async (name,make) => {
+    const job = queue.create('carRegister', {
+        carName: name,
+        carMake: make,
     }).removeOnComplete(true).save((error) => {
         if (error) {
             console.log(error);
             return;
         }
         job.on('complete', (result) => {
-            console.log(`On Complete Hello Intense ${result}`);
+            console.log(`On Complete --> Email Sent to user`);
             return result;
         });
         job.on('failed', () => {

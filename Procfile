@@ -1,1 +1,1 @@
-worker: node verify.js
+worker: node workerQueueProcessing.js
